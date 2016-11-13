@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 
 public abstract class WelcomeActivity extends AppCompatActivity {
 
@@ -22,18 +23,15 @@ public abstract class WelcomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    protected View getWelcomeFrame(){
         configuration = configuration();
-
-        /* Passing null for savedInstanceState fixes issue with fragments in list not matching
-           the displayed ones after the screen was rotated. (Parallax animations would stop working)
-           TODO: Look into this more
-         */
-        super.onCreate(null);
-        setContentView(R.layout.wel_activity_welcome);
-
+        View welcomeFrame = getLayoutInflater().inflate(R.layout.wel_activity_welcome,null);
         adapter = new WelcomeFragmentPagerAdapter(getSupportFragmentManager());
 
-        viewPager = (ViewPager) findViewById(R.id.wel_view_pager);
+        viewPager = (ViewPager) welcomeFrame.findViewById(R.id.wel_view_pager);
         viewPager.setAdapter(adapter);
 
         if (configuration.getShowActionBarBackButton()) {
@@ -42,7 +40,7 @@ public abstract class WelcomeActivity extends AppCompatActivity {
                 actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        SkipButton skip = new SkipButton(findViewById(R.id.wel_button_skip));
+        SkipButton skip = new SkipButton(welcomeFrame.findViewById(R.id.wel_button_skip));
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,7 +48,7 @@ public abstract class WelcomeActivity extends AppCompatActivity {
             }
         });
 
-        PreviousButton prev = new PreviousButton(findViewById(R.id.wel_button_prev));
+        PreviousButton prev = new PreviousButton(welcomeFrame.findViewById(R.id.wel_button_prev));
         prev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,7 +56,7 @@ public abstract class WelcomeActivity extends AppCompatActivity {
             }
         });
 
-        NextButton next = new NextButton(findViewById(R.id.wel_button_next));
+        NextButton next = new NextButton(welcomeFrame.findViewById(R.id.wel_button_next));
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,7 +64,7 @@ public abstract class WelcomeActivity extends AppCompatActivity {
             }
         });
 
-        DoneButton done = new DoneButton(findViewById(R.id.wel_button_done));
+        DoneButton done = new DoneButton(welcomeFrame.findViewById(R.id.wel_button_done));
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,10 +72,11 @@ public abstract class WelcomeActivity extends AppCompatActivity {
             }
         });
 
-        WelcomeViewPagerIndicator indicator = (WelcomeViewPagerIndicator) findViewById(R.id.wel_pager_indicator);
-        WelcomeBackgroundView background = (WelcomeBackgroundView) findViewById(R.id.wel_background_view);
+        WelcomeViewPagerIndicator indicator = (WelcomeViewPagerIndicator)
+                welcomeFrame.findViewById(R.id.wel_pager_indicator);
+        WelcomeBackgroundView background = (WelcomeBackgroundView) welcomeFrame.findViewById(R.id.wel_background_view);
 
-        WelcomeViewHider hider = new WelcomeViewHider(findViewById(R.id.wel_root));
+        WelcomeViewHider hider = new WelcomeViewHider(welcomeFrame.findViewById(R.id.wel_root));
         hider.setOnViewHiddenListener(new WelcomeViewHider.OnViewHiddenListener() {
             @Override
             public void onViewHidden() {
@@ -90,6 +89,7 @@ public abstract class WelcomeActivity extends AppCompatActivity {
         viewPager.addOnPageChangeListener(responsiveItems);
         viewPager.setCurrentItem(configuration.firstPageIndex());
         responsiveItems.onPageSelected(viewPager.getCurrentItem());
+        return welcomeFrame;
     }
 
     @Override

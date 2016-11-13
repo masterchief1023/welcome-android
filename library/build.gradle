@@ -39,6 +39,17 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:support-annotations:24.2.1'
 }
+task clearJar(type: Delete) {
+    delete 'build/outputs/welcomelib.jar'
+}
+
+task makeJar(type: Copy) {
+    from('build/intermediates/bundles/release/')
+    into('build/outputs/')
+    include('classes.jar')
+    rename ('classes.jar', 'welcomelib.jar')
+}
+
 
 apply from: '../gradle/bintray.gradle'
 
