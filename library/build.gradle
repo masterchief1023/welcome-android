@@ -1,15 +1,14 @@
 apply plugin: 'com.android.library'
-apply plugin: 'jacoco-android'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.3"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
 
     publishNonDefault true
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 24
+        minSdkVersion 16
+        targetSdkVersion 28
         versionCode Integer.parseInt(VERSION_CODE)
         versionName VERSION_NAME
     }
@@ -32,12 +31,11 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:1.10.19'
-    compile 'com.android.support:support-v4:24.2.1'
-    compile 'com.android.support:preference-v7:24.2.1'
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:support-annotations:24.2.1'
+    compile 'androidx.preference:preference:1.1.0'
+    compile 'androidx.appcompat:appcompat:1.1.0'
+    compile 'androidx.annotation:annotation:1.1.0'
+    compile 'androidx.viewpager:viewpager:1.0.0'
+    compile 'androidx.fragment:fragment:1.2.2'
 }
 task clearJar(type: Delete) {
     delete 'build/outputs/welcomelib.jar'
@@ -50,8 +48,6 @@ task makeJar(type: Copy) {
     rename ('classes.jar', 'welcomelib.jar')
 }
 
-
-apply from: '../gradle/bintray.gradle'
 
 task generatePublicXml(type: Exec) {
     workingDir 'src/main/res-public'

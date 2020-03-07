@@ -1,7 +1,7 @@
 package com.stephentuso.welcome;
 
-import android.support.annotation.DrawableRes;
-import android.support.v4.app.Fragment;
+import androidx.annotation.DrawableRes;
+import androidx.fragment.app.Fragment;
 
 /**
  * A page with a large image, header, and description
